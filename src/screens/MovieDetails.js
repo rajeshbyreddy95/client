@@ -70,6 +70,8 @@ const MovieDetails = ({ darkMode }) => {
       </div>
     );
   }
+  
+console.log(movie);
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} font-sans py-6 sm:py-8`}>
