@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const MovieDetails = ({ darkMode }) => {
@@ -12,6 +12,8 @@ const MovieDetails = ({ darkMode }) => {
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState('');
   const castContainerRef = useRef(null);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -173,7 +175,7 @@ console.log(movie);
               className="flex overflow-x-auto space-x-3 sm:space-x-4 pb-4 scrollbar-hide snap-x snap-mandatory touch-pan-x"
             >
               {movie.cast.map((actor, index) => (
-                <div key={index} className="flex-none w-24 sm:w-28 md:w-32 text-center group snap-center">
+                <div key={index} className="flex-none w-24 sm:w-28 md:w-32 text-center group snap-center" onClick={()=>navigate(`/cast/${actor.id}`)}>
                   <img
                     src={actor.profile || 'https://via.placeholder.com/150?text=No+Image'}
                     alt={actor.name}

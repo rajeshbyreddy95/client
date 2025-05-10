@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './screens/Home';
 import './index.css';
 import MovieDetails from './screens/MovieDetails';
+import Cast from './screens/Cast';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -15,6 +16,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home darkMode={darkMode} />} />
           <Route path="/movieDetails/:id" element={<MovieDetails darkMode={darkMode} />} />
+          <Route path="/cast/:id" element={<Cast darkMode={darkMode} />} />
         </Routes>
       </BrowserRouter>
     </div>
