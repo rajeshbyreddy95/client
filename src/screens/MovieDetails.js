@@ -28,7 +28,7 @@ const MovieDetails = ({ darkMode }) => {
     };
 
     fetchMovieDetails();
-  }, [id]);
+  }, []);
 
   const scrollCast = (direction) => {
     if (castContainerRef.current) {
