@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Nav from './screens/Nav';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './screens/Home';
+import './index.css';
+import MovieDetails from './screens/MovieDetails';
 
-function App() {
+const App = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <Nav setDarkMode={setDarkMode} darkMode={darkMode}/>
+        <Routes>
+          <Route path="/" element={<Home darkMode={darkMode} />} />
+          <Route path="/movieDetails/:id" element={<MovieDetails darkMode={darkMode} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;
