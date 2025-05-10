@@ -45,9 +45,9 @@ const SignUp = ({ darkMode = true }) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(`https://movierecomendation-gilt.vercel.app/signup`, formData, {
-        timeout: 10000,
-      });
+        console.log(formData);
+        
+      const response = await axios.post(`https://movierecomendation-gilt.vercel.app/signup`, formData)
       setServerMessage(response.data.message);
       setFormData({
         email: '',
