@@ -47,7 +47,14 @@ const SignUp = ({ darkMode = true }) => {
     try {
         console.log(formData);
         
-      const response = await axios.post(`https://movierecomendation-gilt.vercel.app/api/auth/signup`, formData);
+        const response = await axios.post(
+  'https://movierecomendation-git-main-rajeshbyreddy95gmailcoms-projects.vercel.app/api/auth/signup',
+  formData,
+  {
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: false, // or true if using cookies
+  }
+);
 
       setServerMessage(response.data.message);
       setFormData({
