@@ -5,6 +5,7 @@ import Home from './screens/Home';
 import './index.css';
 import MovieDetails from './screens/MovieDetails';
 import Cast from './screens/Cast';
+import SignUp from './screens/SignUp';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/" element={<Home darkMode={darkMode} />} />
           <Route path="/movieDetails/:id" element={<MovieDetails darkMode={darkMode} />} />
           <Route path="/cast/:id" element={<Cast darkMode={darkMode} />} />
+          <Route path="/signup" element={<SignUp darkMode={darkMode} />} />
         </Routes>
       </BrowserRouter>
     </div>
