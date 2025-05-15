@@ -21,7 +21,7 @@ const Genres = ({ darkMode }) => {
 
   const fetchGenres = async () => {
     try {
-      const response = await axios.get('/api/tmdb/genres');
+      const response = await axios.get('https://cineflixserver-nine.vercel.app/api/genres');
       setGenres(response.data);
     } catch (error) {
       console.error('Error fetching genres:', error);
