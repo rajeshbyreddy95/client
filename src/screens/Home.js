@@ -28,12 +28,12 @@ const Home = ({ darkMode }) => {
     <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
       <Carousel data={data} darkMode={darkMode} />
       <TrendingMovies darkMode={darkMode} />
-      <Series darkMode={darkMode} />
+      {/* <Series darkMode={darkMode} />
       <UpcomingMovies darkMode={darkMode} />
       <TopRatedMovies darkMode={darkMode} />
-      {/* <UserFavorites darkMode={darkMode} /> */}
+      <UserFavorites darkMode={darkMode} />
       <GenreMovies darkMode={darkMode} genreId={28} />
-      <GenreMovies darkMode={darkMode} genreId={35} />
+      <GenreMovies darkMode={darkMode} genreId={35} /> */}
     </div>
   );
 };
