@@ -7,6 +7,7 @@ import UpcomingMovies from './UpcomingMovies';
 import TopRatedMovies from './TopRatedMovies';
 // import UserFavorites from './UserFavorites';
 import GenreMovies from './GenreMovies';
+import Genres from './Genres';
 
 const Home = ({ darkMode }) => {
   const [data, setData] = useState([]);
@@ -28,6 +29,7 @@ const Home = ({ darkMode }) => {
     <div className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
       <Carousel data={data} darkMode={darkMode} />
       <TrendingMovies darkMode={darkMode} />
+      <Genres darkMode={darkMode} />
       {/* <Series darkMode={darkMode} />
       <UpcomingMovies darkMode={darkMode} />
       <TopRatedMovies darkMode={darkMode} />
