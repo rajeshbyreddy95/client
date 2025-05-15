@@ -9,7 +9,6 @@ const GenrePage = ({ darkMode }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [genreId, setGenreId] = useState(null);
-  const fallbackImage = 'https://images.unsplash.com/photo-1501426026826-31c667bdf23d?q=80&w=2076&auto=format&fit=crop';
 
   const genreMap = {
     action: 28,
@@ -34,9 +33,12 @@ const GenrePage = ({ darkMode }) => {
     western: 37,
   };
 
+  const fallbackImage = 'https://images.unsplash.com/photo-1501426026826-31c667bdf23d?q=80&w=2076&auto=format&fit=crop';
+
   useEffect(() => {
     const normalizedName = genreName.toLowerCase().replace('-', ' ');
     const id = genreMap[normalizedName] || genreMap[genreName];
+    console.log('Genre Name:', genreName, 'Normalized:', normalizedName, 'Genre ID:', id); // Debug
     if (id) {
       setGenreId(id);
     } else {
@@ -51,10 +53,16 @@ const GenrePage = ({ darkMode }) => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get(`/api/tmdb/genre/${genreId}`);
-        setMovies(response.data);
+        console.log('API Response:', response.data); // Debug
+        // Handle TMDB response format
+        const movieData = Array.isArray(response.data)
+          ? response.data
+          : response.data.results || [];
+        setMovies(movieData);
       } catch (error) {
         console.error('Error fetching genre movies:', error);
         setError('Failed to load movies.');
+        setMovies([]); // Ensure movies is an array on error
       } finally {
         setLoading(false);
       }
@@ -67,29 +75,29 @@ const GenrePage = ({ darkMode }) => {
       <h2
         className={`text-4xl font-extrabold mb-10 capitalize ${
           darkMode ? 'text-white' : 'text-gray-900'
-        } drop-shadow-lg`}
+        } drop-shadow-lg animate-fade-in`}
       >
         {genreName.replace('-', ' ')} Movies
       </h2>
-      {error && <p className="text-red-500 mb-6 text-center font-medium">{error}</p>}
+      {error && <p className="text-red-500 mb-6 text-center font-medium animate-pulse">{error}</p>}
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <ClipLoader color={darkMode ? '#ffffff' : '#1f2937'} size={60} />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-          {movies.length > 0 ? (
+          {Array.isArray(movies) && movies.length > 0 ? (
             movies.map((movie) => (
               <div
                 key={movie.id}
                 className={`p-4 rounded-2xl shadow-lg ${
                   darkMode ? 'bg-gray-800/30 backdrop-blur-lg text-white' : 'bg-white/30 backdrop-blur-lg text-gray-900'
-                } border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
+                } border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transform transition-all duration-300 hover:scale-105 hover:shadow-xl`}
               >
                 <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallbackImage}
                   alt={movie.title}
-                  className="w-full h-64 object-cover rounded-md mb-4"
+                  className="w-full h-64 object-cover rounded-md mb-4 transition-opacity duration-300 hover:opacity-90"
                   onError={(e) => (e.target.src = fallbackImage)}
                 />
                 <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
