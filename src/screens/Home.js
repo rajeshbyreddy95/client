@@ -8,7 +8,9 @@ const Home = ({ darkMode }) => {
 
   const fetchData = async () => {
     try {
-      const resp = await axios.get('https://movierecomendation-gilt.vercel.app/movies');
+      const resp = await axios.get('https://cineflixserver-nine.vercel.app/api/movies');
+      console.log(resp.data);
+      
       setData(resp.data);
     } catch (error) {
       console.error('Error fetching movies:', error);

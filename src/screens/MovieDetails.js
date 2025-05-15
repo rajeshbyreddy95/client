@@ -18,7 +18,7 @@ const MovieDetails = ({ darkMode }) => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await axios.get(`https://movierecomendation-gilt.vercel.app/movieDetails/${id}`);
+        const response = await axios.get(`https://cineflixserver-nine.vercel.app/api/movieDetails/${id}`);
         setMovie(response.data);
         setLoading(false);
       } catch (err) {

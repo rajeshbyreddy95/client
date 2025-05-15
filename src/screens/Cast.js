@@ -11,7 +11,7 @@ const Cast = ({ darkMode = false }) => {
   useEffect(() => {
     const fetchCast = async () => {
       try {
-        const res = await axios.get(`https://movierecomendation-gilt.vercel.app/cast/${id}`, {
+        const res = await axios.get(`https://cineflixserver-nine.vercel.app/api/cast/${id}`, {
           timeout: 10000,
         });
         setCast(res.data);

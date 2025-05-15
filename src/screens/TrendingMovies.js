@@ -17,7 +17,7 @@ const TrendingMovies = ({ darkMode }) => {
     const fetchTrendingMovies = async () => {
       try {
         console.log('Fetching trending movies...');
-        const response = await client.get('https://movierecomendation-gilt.vercel.app/trending', {
+        const response = await client.get('https://cineflixserver-nine.vercel.app/api/trending', {
           timeout: 10000,
         });
         console.log('Movies fetched:', response.data);
