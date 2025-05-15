@@ -5,7 +5,7 @@ import TrendingMovies from './TrendingMovies';
 import Series from './Series';
 import UpcomingMovies from './UpcomingMovies';
 import TopRatedMovies from './TopRatedMovies';
-import UserFavorites from './UserFavorites';
+// import UserFavorites from './UserFavorites';
 import GenreMovies from './GenreMovies';
 
 const Home = ({ darkMode }) => {
@@ -31,7 +31,7 @@ const Home = ({ darkMode }) => {
       <Series darkMode={darkMode} />
       <UpcomingMovies darkMode={darkMode} />
       <TopRatedMovies darkMode={darkMode} />
-      <UserFavorites darkMode={darkMode} />
+      {/* <UserFavorites darkMode={darkMode} /> */}
       <GenreMovies darkMode={darkMode} genreId={28} />
       <GenreMovies darkMode={darkMode} genreId={35} />
     </div>
