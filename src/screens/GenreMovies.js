@@ -36,7 +36,7 @@ const GenreMovies = ({ darkMode, genreId = 28 }) => {
     const fetchByGenre = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/tmdb/genre/${genreId}`);
+        const response = await axios.get(`https://cineflixserver-nine.vercel.app/api/genre/${genreId}`);
         console.log('Genre Movies API Response:', response.data); // Debug
         const movieData = Array.isArray(response.data) ? response.data : response.data.results || [];
         setMovies(movieData);
