@@ -41,11 +41,7 @@ const Genres = ({ darkMode }) => {
     fetchGenres();
   }, []);
 
-  const handleGenreClick = (genreName) => {
-    const formattedName = normalizeGenreName(genreName);
-    navigate(`/genre/${formattedName}`);
-  };
-
+  
   return (
     <div className={`py-12 px-6 ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-b from-gray-100 to-gray-200'}`}>
       <h2
@@ -68,10 +64,10 @@ const Genres = ({ darkMode }) => {
             genres.map((genre) => (
               <div
                 key={genre.id}
-                onClick={() => handleGenreClick(genre.name)}
+                onClick={() => navigate(`/genre/:${genre.id}`)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleGenreClick(genre.name)}
+                onKeyDown={(e) => e.key === 'Enter' && navigate(`/genre/:${genre.id}`)}
                 className={`relative group cursor-pointer rounded-2xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                   darkMode
                     ? 'bg-gray-800/50 backdrop-blur-md'
