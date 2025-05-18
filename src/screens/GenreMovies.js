@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 
-const GenreMovies = ({ darkMode, genreId = 28 }) => {
+const GenreMovies = ({ darkMode, genreId }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
