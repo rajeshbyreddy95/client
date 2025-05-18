@@ -108,7 +108,7 @@ const GenreMovies = ({ darkMode }) => {
               movies.map((movie) => (
                 <div
                   key={movie.id}
-                  className={`p-4 rounded-2xl shadow-lg ${
+                  className={`p-4 rounded-2xl shadow-lg cursor-pointer ${
                     darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
                   } border hover:scale-105 transition`}
                   onClick={() => navigate(`/movieDetails/${movie.id}`)}
