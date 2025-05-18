@@ -6,6 +6,7 @@ const GenreMovies = ({ darkMode, genreId }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+console.log(genreId);
 
   // Map genre IDs to names for dynamic titles
   const genreMap = {
