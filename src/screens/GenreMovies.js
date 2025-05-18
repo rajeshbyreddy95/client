@@ -47,6 +47,9 @@ const GenreMovies = ({ darkMode }) => {
             sort_by: 'popularity.desc',
           },
         });
+        console.log('====================================');
+        console.log(response.data);
+        console.log('====================================');
 
         const movieData = response.data.results || [];
         setMovies(movieData);
