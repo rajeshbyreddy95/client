@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const GenreMovies = ({ darkMode }) => {
   const [movies, setMovies] = useState([]);
@@ -11,6 +11,7 @@ const GenreMovies = ({ darkMode }) => {
 
   const { genreId } = useParams();
   const genreKey = parseInt(genreId);
+  const navigate = useNavigate()
 
   const genreMap = {
     28: 'Action',
