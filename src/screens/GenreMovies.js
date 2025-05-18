@@ -11,6 +11,10 @@ const GenreMovies = ({ darkMode }) => {
   const { genreId } = useParams();
   const genreKey = parseInt(genreId); // Ensures correct type
 
+  console.log('====================================');
+  console.log(genreKey);
+  console.log('====================================');
+
   // Map genre IDs to names
   const genreMap = {
     28: 'Action',
