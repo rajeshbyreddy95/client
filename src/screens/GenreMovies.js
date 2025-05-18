@@ -9,13 +9,8 @@ const GenreMovies = ({ darkMode }) => {
   const [loading, setLoading] = useState(true);
 
   const { genreId } = useParams();
-  const genreKey = parseInt(genreId); // Ensures correct type
+  const genreKey = parseInt(genreId);
 
-  console.log('====================================');
-  console.log(genreKey);
-  console.log('====================================');
-
-  // Map genre IDs to names
   const genreMap = {
     28: 'Action',
     12: 'Adventure',
@@ -39,110 +34,63 @@ const GenreMovies = ({ darkMode }) => {
   };
 
   const fallbackImage = 'https://via.placeholder.com/500x750?text=No+Image';
-
+  const apiKey = process.env.REACT_APP_TMDB_API_KEY;
   useEffect(() => {
     const fetchByGenre = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await axios.get(`https://cineflixserver-nine.vercel.app/api/genre/${genreId}`);
-        const movieData = Array.isArray(response.data) ? response.data : response.data.results || [];
+        const response = await axios.get(`https://api.themoviedb.org/3/discover/movie`, {
+          params: {
+            api_key: apiKey,  // ⬅️ Replace with your TMDB API key
+            with_genres: genreKey,
+            language: 'en-US',
+            sort_by: 'popularity.desc',
+          },
+        });
+
+        const movieData = response.data.results || [];
         setMovies(movieData);
       } catch (error) {
-        console.error('Error fetching genre movies:', error.response?.data || error.message);
+        console.error('TMDB API Error:', error);
         setError('Failed to load genre movies.');
-        setMovies([]);
       } finally {
         setLoading(false);
       }
     };
 
-    if (genreId) {
+    if (genreKey) {
       fetchByGenre();
     }
-  }, [genreId]);
-
-  const handleAddFavorite = async (movie) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('Please log in to add favorites');
-        return;
-      }
-
-      await axios.post(
-        '/api/favourites',
-        {
-          itemId: movie.id,
-          title: movie.title,
-          poster_path: movie.poster_path,
-          type: 'movie',
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      alert('Added to favorites!');
-    } catch (error) {
-      console.error('Error adding favorite:', error.response?.data || error.message);
-      alert('Failed to add favorite.');
-    }
-  };
+  }, [genreKey]);
 
   return (
     <div className={`py-12 px-6 ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-b from-gray-100 to-gray-200'}`}>
-      <h2
-        className={`text-4xl font-extrabold mb-10 text-center tracking-tight ${
-          darkMode ? 'text-white' : 'text-gray-900'
-        } drop-shadow-lg animate-fade-in`}
-      >
+      <h2 className={`text-4xl font-extrabold mb-10 text-center tracking-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>
         {genreMap[genreKey] || 'Genre'} Movies
       </h2>
 
-      {error && <p className="text-red-500 mb-6 text-center font-medium animate-pulse">{error}</p>}
+      {error && <p className="text-red-500 text-center mb-6">{error}</p>}
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <ClipLoader color={darkMode ? '#ffffff' : '#1f2937'} size={60} />
+          <ClipLoader color={darkMode ? '#fff' : '#000'} size={60} />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-          {movies.length > 0 ? (
-            movies.map((movie) => (
-              <div
-                key={movie.id}
-                className={`p-4 rounded-2xl shadow-lg ${
-                  darkMode ? 'bg-gray-800/30 backdrop-blur-lg text-white' : 'bg-white/30 backdrop-blur-lg text-gray-900'
-                } border ${darkMode ? 'border-gray-700' : 'border-gray-200'} transform transition-all duration-300 hover:scale-105 hover:shadow-xl group`}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && handleAddFavorite(movie)}
-                aria-label={`Add ${movie.title} to favorites`}
-              >
-                <img
-                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallbackImage}
-                  alt={movie.title}
-                  className="w-full h-64 object-cover rounded-md mb-4 transition-opacity duration-300 group-hover:opacity-90"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = fallbackImage;
-                  }}
-                />
-                <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
-                <p className="text-sm mb-4">Rating: {movie.vote_average}/10</p>
-                <button
-                  onClick={() => handleAddFavorite(movie)}
-                  className={`w-full px-4 py-2 rounded-lg ${
-                    darkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
-                  } text-white font-medium transition-colors duration-300`}
-                >
-                  Add to Favorites
-                </button>
-              </div>
-            ))
-          ) : (
-            <p className={`text-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              No movies available.
-            </p>
-          )}
+          {movies.map((movie) => (
+            <div
+              key={movie.id}
+              className={`p-4 rounded-2xl shadow-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} border hover:scale-105 transition`}
+            >
+              <img
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallbackImage}
+                alt={movie.title}
+                className="w-full h-64 object-cover rounded mb-4"
+              />
+              <h3 className="text-lg font-semibold">{movie.title}</h3>
+              <p className="text-sm mb-2">Rating: {movie.vote_average}/10</p>
+            </div>
+          ))}
         </div>
       )}
     </div>
