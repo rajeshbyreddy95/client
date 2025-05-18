@@ -38,40 +38,45 @@ const GenreMovies = ({ darkMode }) => {
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
 
   useEffect(() => {
-    const fetchByGenre = async () => {
-      if (!genreKey || !genreMap[genreKey]) {
-        setError('Invalid genre.');
-        setLoading(false);
-        return;
-      }
+   const fetchByGenre = async () => {
+  if (!genreKey || !genreMap[genreKey]) {
+    setError('Invalid genre.');
+    setLoading(false);
+    return;
+  }
 
-      setLoading(true);
-      try {
-        // Fetch movies for the current page
-        const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
-          params: {
-            api_key: apiKey,
-            with_genres: genreKey,
-            language: 'en-US',
-            sort_by: 'popularity.desc',
-            page: page,
-          },
-        });
+  if (!apiKey) {
+    setError('API key is missing. Please check configuration.');
+    setLoading(false);
+    return;
+  }
 
-        const movieData = response.data.results || [];
-        setMovies(movieData);
+  setLoading(true);
+  try {
+    const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+      params: {
+        api_key: apiKey,
+        with_genres: genreKey,
+        language: 'en-US',
+        sort_by: 'popularity.desc',
+        page: page,
+      },
+    });
 
-        if (movieData.length === 0) {
-          setError('No movies found for this genre.');
-        }
-      } catch (error) {
-        console.error('TMDB API Error:', error);
-        setError(error.response?.data?.status_message || 'Failed to load genre movies.');
-        setMovies([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const movieData = response.data.results || [];
+    setMovies(movieData);
+
+    if (movieData.length === 0) {
+      setError('No movies found for this genre.');
+    }
+  } catch (error) {
+    console.error('TMDB API Error:', error);
+    setError(error.response?.data?.status_message || 'Failed to load genre movies.');
+    setMovies([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchByGenre();
   }, [genreKey, page]); // Removed apiKey, added page
@@ -105,6 +110,7 @@ const GenreMovies = ({ darkMode }) => {
                   className={`p-4 rounded-2xl shadow-lg ${
                     darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
                   } border hover:scale-105 transition`}
+                  onClick={() => navigate(`/movieDetails/${movie.id}`)}
                 >
                   <img
                     src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallbackImage}
