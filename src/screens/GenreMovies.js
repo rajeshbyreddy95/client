@@ -35,6 +35,9 @@ const GenreMovies = ({ darkMode }) => {
 
   const fallbackImage = 'https://via.placeholder.com/500x750?text=No+Image';
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
+  console.log('====================================');
+  console.log(apiKey);
+  console.log('====================================');
   useEffect(() => {
     const fetchByGenre = async () => {
       setLoading(true);
