@@ -64,10 +64,10 @@ const Genres = ({ darkMode }) => {
             genres.map((genre) => (
               <div
                 key={genre.id}
-                onClick={() => navigate(`/genre/:${genre.id}`)}
+                onClick={() => navigate(`/genre/${genre.id}`)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && navigate(`/genre/:${genre.id}`)}
+                onKeyDown={(e) => e.key === 'Enter' && navigate(`/genre/${genre.id}`)}
                 className={`relative group cursor-pointer rounded-2xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl ${
                   darkMode
                     ? 'bg-gray-800/50 backdrop-blur-md'
