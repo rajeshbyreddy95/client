@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import { useParams } from 'react-router-dom';
 
-const GenreMovies = ({ darkMode, genreId }) => {
+const GenreMovies = ({ darkMode}) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
