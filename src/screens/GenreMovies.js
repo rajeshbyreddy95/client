@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
+import { useParams } from 'react-router-dom';
 
 const GenreMovies = ({ darkMode, genreId }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-console.log(genreId);
+
+  const {genreId} = useParams();
+
+  console.log(genreId);
+  
 
   // Map genre IDs to names for dynamic titles
   const genreMap = {
