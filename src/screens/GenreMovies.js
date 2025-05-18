@@ -35,21 +35,34 @@ const GenreMovies = ({ darkMode }) => {
 
   const fallbackImage = 'https://via.placeholder.com/500x750?text=No+Image';
   const apiKey = process.env.REACT_APP_TMDB_API_KEY;
-  console.log('====================================');
-  console.log(apiKey);
-  console.log('====================================');
+
   useEffect(() => {
     const fetchByGenre = async () => {
       setLoading(true);
       try {
-        const response1 = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=1`);
-        const response2 = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=2`);
-        console.log('====================================');
-        console.log('====================================');
+        const [res1, res2] = await Promise.all([
+          axios.get(`https://api.themoviedb.org/3/discover/movie`, {
+            params: {
+              api_key: apiKey,
+              with_genres: genreKey,
+              language: en-US,
+              sort_by: popularity.desc,
+              page: 1,
+            },
+          }),
+          axios.get(`https://api.themoviedb.org/3/discover/movie`, {
+            params: {
+              api_key: apiKey,
+              with_genres: genreKey,
+              language: 'en-US',
+              sort_by: 'popularity.desc',
+              page: 2,
+            },
+          }),
+        ]);
 
-        const movieData = response.data.results || [];
+        const movieData = [...res1.data.results, ...res2.data.results];
         setMovies(movieData);
-        setMovies(...movieData);
       } catch (error) {
         console.error('TMDB API Error:', error);
         setError('Failed to load genre movies.');
@@ -61,7 +74,7 @@ const GenreMovies = ({ darkMode }) => {
     if (genreKey) {
       fetchByGenre();
     }
-  }, [genreKey]);
+  }, [genreKey, apiKey]);
 
   return (
     <div className={`py-12 px-6 ${darkMode ? 'bg-gray-900' : 'bg-gradient-to-b from-gray-100 to-gray-200'}`}>
