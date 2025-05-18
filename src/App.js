@@ -6,7 +6,6 @@ import './index.css';
 import MovieDetails from './screens/MovieDetails';
 import Cast from './screens/Cast';
 import SignUp from './screens/SignUp';
-import GenrePage from './screens/GenrePage';
 import GenreMovies from './screens/GenreMovies';
 
 const App = () => {
@@ -15,13 +14,13 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Nav setDarkMode={setDarkMode} darkMode={darkMode}/>
+        <Nav setDarkMode={setDarkMode} darkMode={darkMode} />
         <Routes>
           <Route path="/" element={<Home darkMode={darkMode} />} />
           <Route path="/movieDetails/:id" element={<MovieDetails darkMode={darkMode} />} />
           <Route path="/cast/:id" element={<Cast darkMode={darkMode} />} />
           <Route path="/signup" element={<SignUp darkMode={darkMode} />} />
-          <Route path="/genre/:genreName" element={<GenreMovies darkMode={darkMode} />} />
+          <Route path="/genre/:genreId" element={<GenreMovies darkMode={darkMode} />} />
         </Routes>
       </BrowserRouter>
     </div>

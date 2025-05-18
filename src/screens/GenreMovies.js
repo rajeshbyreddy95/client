@@ -3,17 +3,15 @@ import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import { useParams } from 'react-router-dom';
 
-const GenreMovies = ({ darkMode}) => {
+const GenreMovies = ({ darkMode }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const {genreName} = useParams();
+  const { genreId } = useParams();
+  const genreKey = parseInt(genreId); // Ensures correct type
 
-  console.log(genreId);
-  
-
-  // Map genre IDs to names for dynamic titles
+  // Map genre IDs to names
   const genreMap = {
     28: 'Action',
     12: 'Adventure',
@@ -36,14 +34,13 @@ const GenreMovies = ({ darkMode}) => {
     37: 'Western',
   };
 
-  const fallbackImage = 'https://images.unsplash.com/photo-1501426026826-31c667bdf23d?q=80&w=2076&auto=format&fit=crop';
+  const fallbackImage = 'https://via.placeholder.com/500x750?text=No+Image';
 
   useEffect(() => {
     const fetchByGenre = async () => {
       try {
         setLoading(true);
         const response = await axios.get(`https://cineflixserver-nine.vercel.app/api/genre/${genreId}`);
-        console.log('Genre Movies API Response:', response.data); // Debug
         const movieData = Array.isArray(response.data) ? response.data : response.data.results || [];
         setMovies(movieData);
       } catch (error) {
@@ -54,7 +51,10 @@ const GenreMovies = ({ darkMode}) => {
         setLoading(false);
       }
     };
-    fetchByGenre();
+
+    if (genreId) {
+      fetchByGenre();
+    }
   }, [genreId]);
 
   const handleAddFavorite = async (movie) => {
@@ -64,6 +64,7 @@ const GenreMovies = ({ darkMode}) => {
         alert('Please log in to add favorites');
         return;
       }
+
       await axios.post(
         '/api/favourites',
         {
@@ -74,6 +75,7 @@ const GenreMovies = ({ darkMode}) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       alert('Added to favorites!');
     } catch (error) {
       console.error('Error adding favorite:', error.response?.data || error.message);
@@ -88,16 +90,18 @@ const GenreMovies = ({ darkMode}) => {
           darkMode ? 'text-white' : 'text-gray-900'
         } drop-shadow-lg animate-fade-in`}
       >
-        {genreMap[genreId] || 'Genre'} Movies
+        {genreMap[genreKey] || 'Genre'} Movies
       </h2>
+
       {error && <p className="text-red-500 mb-6 text-center font-medium animate-pulse">{error}</p>}
+
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <ClipLoader color={darkMode ? '#ffffff' : '#1f2937'} size={60} />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-          {Array.isArray(movies) && movies.length > 0 ? (
+          {movies.length > 0 ? (
             movies.map((movie) => (
               <div
                 key={movie.id}
@@ -113,7 +117,10 @@ const GenreMovies = ({ darkMode}) => {
                   src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : fallbackImage}
                   alt={movie.title}
                   className="w-full h-64 object-cover rounded-md mb-4 transition-opacity duration-300 group-hover:opacity-90"
-                  onError={(e) => (e.target.src = fallbackImage)}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = fallbackImage;
+                  }}
                 />
                 <h3 className="text-lg font-semibold truncate">{movie.title}</h3>
                 <p className="text-sm mb-4">Rating: {movie.vote_average}/10</p>
@@ -129,7 +136,7 @@ const GenreMovies = ({ darkMode}) => {
             ))
           ) : (
             <p className={`text-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              No movies available. {genreId}
+              No movies available.
             </p>
           )}
         </div>
