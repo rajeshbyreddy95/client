@@ -10,6 +10,9 @@ const GenrePage = ({ darkMode }) => {
   const [loading, setLoading] = useState(true);
   const [genreId, setGenreId] = useState(null);
 
+  // Replace with your TMDB API key
+  const TMDB_API_KEY = 'YOUR_TMDB_API_KEY_HERE';
+
   const genreMap = {
     action: 28,
     adventure: 12,
@@ -52,15 +55,21 @@ const GenrePage = ({ darkMode }) => {
 
     const fetchMovies = async () => {
       try {
-        const response = await axios.get(`https://cineflixserver-nine.vercel.app/api/genre/${genreId}`);
-        console.log('API Response:', response.data); // Debug
-        // Handle TMDB response format
-        const movieData = Array.isArray(response.data)
-          ? response.data
-          : response.data.results || [];
+        const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+          params: {
+            api_key: TMDB_API_KEY,
+            with_genres: genreId,
+            language: 'en-US',
+            sort_by: 'popularity.desc',
+            page: 1,
+          },
+        });
+        console.log('TMDB API Response:', response.data); // Debug
+        // TMDB response contains a 'results' array
+        const movieData = response.data.results || [];
         setMovies(movieData);
       } catch (error) {
-        console.error('Error fetching genre movies:', error);
+        console.error('Error fetching genre movies from TMDB:', error);
         setError('Failed to load movies.');
         setMovies([]); // Ensure movies is an array on error
       } finally {
