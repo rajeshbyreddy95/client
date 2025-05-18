@@ -42,7 +42,6 @@ const GenreMovies = ({ darkMode }) => {
         const response1 = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=1`);
         const response2 = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=2`);
         console.log('====================================');
-        console.log(response.data);
         console.log('====================================');
 
         const movieData = response.data.results || [];
