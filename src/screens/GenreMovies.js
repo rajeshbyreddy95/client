@@ -41,24 +41,8 @@ const GenreMovies = ({ darkMode }) => {
       setLoading(true);
       try {
         const [res1, res2] = await Promise.all([
-          axios.get(`https://api.themoviedb.org/3/discover/movie`, {
-            params: {
-              api_key: apiKey,
-              with_genres: genreKey,
-              language: en-US,
-              sort_by: popularity.desc,
-              page: 1,
-            },
-          }),
-          axios.get(`https://api.themoviedb.org/3/discover/movie`, {
-            params: {
-              api_key: apiKey,
-              with_genres: genreKey,
-              language: 'en-US',
-              sort_by: 'popularity.desc',
-              page: 2,
-            },
-          }),
+          axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=1`),
+          axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=28&language=en-US&sort_by=popularity.desc&page=2`),
         ]);
 
         const movieData = [...res1.data.results, ...res2.data.results];
