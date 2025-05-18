@@ -129,7 +129,7 @@ const GenreMovies = ({ darkMode, genreId }) => {
             ))
           ) : (
             <p className={`text-center ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              No movies available.
+              No movies available. {genreId}
             </p>
           )}
         </div>
