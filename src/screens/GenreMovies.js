@@ -8,7 +8,7 @@ const GenreMovies = ({ darkMode}) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const {genreId} = useParams();
+  const {genreName} = useParams();
 
   console.log(genreId);
   
