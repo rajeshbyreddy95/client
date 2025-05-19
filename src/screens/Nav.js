@@ -10,7 +10,7 @@ const Nav = ({ darkMode, setDarkMode }) => {
   const toggleDark = () => setDarkMode(!darkMode);
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleGenres = () => setGenresOpen(!genresOpen);
-
+  
   const genreMap = {
     28: 'Action',
     12: 'Adventure',
@@ -97,7 +97,7 @@ const Nav = ({ darkMode, setDarkMode }) => {
             {/* Genres Dropdown */}
             <div className="relative">
               <button
-                onClick={togglegates}
+                onClick={toggleGenres}
                 onMouseEnter={() => setGenresOpen(true)}
                 className="flex items-center hover:text-red-500 transition-colors py-2 lg:py-0 focus:outline-none"
                 aria-haspopup="true"
