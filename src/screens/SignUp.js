@@ -51,7 +51,7 @@ const SignUp = ({ darkMode = true }) => {
     
     try {
       const response = await axios.post(
-        'https://movierecomendation-gilt.vercel.app/api/auth/signup',
+        'https://cineflixserver-nine.vercel.app/api/auth/signup',
         formData,
         {
           headers: {
