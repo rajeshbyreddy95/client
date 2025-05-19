@@ -58,22 +58,22 @@ const Profile = ({ darkMode }) => {
     fetchUserData();
   }, [navigate]);
 
-  const handleRemoveFavourite = async (id) => {
-    const token = localStorage.getItem('token');
-    try {
-      await axios.delete(
-        `https://cineflixserver-nine.vercel.app/api/favourites/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setFavourites(favourites.filter((fav) => fav.id !== id));
-      setError('');
-    } catch (err) {
-      console.error('Remove favourite error:', err.response?.data);
-      setError('Failed to remove favourite.');
-    }
-  };
+//   const handleRemoveFavourite = async (id) => {
+//     const token = localStorage.getItem('token');
+//     try {
+//       await axios.delete(
+//         `https://cineflixserver-nine.vercel.app/api/favourites/${id}`,
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+//       setFavourites(favourites.filter((fav) => fav.id !== id));
+//       setError('');
+//     } catch (err) {
+//       console.error('Remove favourite error:', err.response?.data);
+//       setError('Failed to remove favourite.');
+//     }
+//   };
 
   if (loading) {
     return (
