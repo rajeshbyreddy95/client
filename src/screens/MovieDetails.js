@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { CheckCircle, AlertCircle } from 'lucide-react';
 
 const MovieDetails = ({ darkMode }) => {
   const { id } = useParams();
@@ -11,9 +12,9 @@ const MovieDetails = ({ darkMode }) => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState('');
+  const [toast, setToast] = useState({ message: '', type: '', visible: false });
   const castContainerRef = useRef(null);
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -28,7 +29,7 @@ const MovieDetails = ({ darkMode }) => {
     };
 
     fetchMovieDetails();
-  }, []);
+  }, [id]);
 
   const scrollCast = (direction) => {
     if (castContainerRef.current) {
@@ -52,6 +53,49 @@ const MovieDetails = ({ darkMode }) => {
     setCommentError('');
   };
 
+  const handleAddToFavourites = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setToast({
+        message: 'Please log in to add to favourites',
+        type: 'error',
+        visible: true,
+      });
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+
+    try {
+      await axios.post(
+        'https://cineflixserver-nine.vercel.app/api/favourites',
+        { movieId: id },
+        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+      );
+      setToast({
+        message: 'Movie added to favourites!',
+        type: 'success',
+        visible: true,
+      });
+    } catch (error) {
+      console.error('Add favourite error:', error.response?.data);
+      setToast({
+        message: error.response?.data?.message || 'Failed to add to favourites',
+        type: 'error',
+        visible: true,
+      });
+    }
+  };
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toast.visible) {
+      const timer = setTimeout(() => {
+        setToast({ ...toast, visible: false });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+
   if (loading) {
     return (
       <div className={`flex items-center justify-center h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
@@ -72,11 +116,29 @@ const MovieDetails = ({ darkMode }) => {
       </div>
     );
   }
-  
-console.log(movie);
+
+  console.log(movie);
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'} font-sans py-6 sm:py-8`}>
+      {/* Toast Notification */}
+      {toast.visible && (
+        <div
+          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in max-w-sm ${
+            toast.type === 'success'
+              ? 'bg-green-100 text-green-700'
+              : 'bg-red-100 text-red-700'
+          }`}
+        >
+          {toast.type === 'success' ? (
+            <CheckCircle size={20} />
+          ) : (
+            <AlertCircle size={20} />
+          )}
+          <span className="text-sm font-semibold">{toast.message}</span>
+        </div>
+      )}
+
       {/* Hero Card */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mb-6 sm:mb-8">
         <div className="relative bg-gradient-to-br from-purple-600 to-blue-500 rounded-2xl shadow-2xl overflow-hidden h-[50vh] sm:h-[60vh] md:h-[70vh] animate-fade-in">
@@ -101,7 +163,10 @@ console.log(movie);
               >
                 <span>▶</span> Watch Trailer
               </button>
-              <button className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-white font-semibold text-sm sm:text-base shadow-lg transform hover:scale-105 transition-all duration-300">
+              <button
+                onClick={handleAddToFavourites}
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-white font-semibold text-sm sm:text-base shadow-lg transform hover:scale-105 transition-all duration-300"
+              >
                 Add to Watchlist
               </button>
             </div>
@@ -175,7 +240,7 @@ console.log(movie);
               className="flex overflow-x-auto space-x-3 sm:space-x-4 pb-4 scrollbar-hide snap-x snap-mandatory touch-pan-x"
             >
               {movie.cast.map((actor, index) => (
-                <div key={index} className="flex-none w-24 sm:w-28 md:w-32 text-center group snap-center" onClick={()=>navigate(`/cast/${actor.id}`)}>
+                <div key={index} className="flex-none w-24 sm:w-28 md:w-32 text-center group snap-center" onClick={() => navigate(`/cast/${actor.id}`)}>
                   <img
                     src={actor.profile || 'https://via.placeholder.com/150?text=No+Image'}
                     alt={actor.name}
@@ -199,7 +264,7 @@ console.log(movie);
               onClick={() => scrollCast('right')}
               className="absolute top-1/2 -right-3 sm:-right-4 transform -translate-y-1/2 bg-white/30 backdrop-blur-md rounded-full p-2 sm:p-3 opacity-70 hover:opacity-100 hover:bg-white/50 transition-all duration-200"
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -254,7 +319,7 @@ console.log(movie);
               comments.map((c) => (
                 <div
                   key={c.id}
-                  className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-lg shadow-md border border-white/20 animate-slide-up"
+                  className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-lg shadow-md border border-white.AUTO /20 animate-slide-up"
                 >
                   <p className="text-sm sm:text-base text-white">{c.text}</p>
                   <p className="text-xs sm:text-sm text-gray-200 mt-1">{c.timestamp}</p>
