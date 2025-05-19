@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Eye, EyeOff } from 'lucide-react';
 
 const SignUp = ({ darkMode = true }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const SignUp = ({ darkMode = true }) => {
   const [errors, setErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,17 +48,15 @@ const SignUp = ({ darkMode = true }) => {
 
     setLoading(true);
     try {
-        console.log(formData);
-        const response = await axios.post(
-  'https://movierecomendation-gilt.vercel.app/api/auth/signup', // Replace with actual backend URL
-  formData,  // The data object you're sending
-  {
-    headers: {
-      'Content-Type': 'application/json',  // Ensures proper content type
-    },
-  }
-);
-
+      const response = await axios.post(
+        'https://movierecomendation-gilt.vercel.app/api/auth/signup',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       setServerMessage(response.data.message);
       setFormData({
@@ -73,29 +74,46 @@ const SignUp = ({ darkMode = true }) => {
     }
   };
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+
   return (
-    <div className={`min-h-screen flex items-center justify-center ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} bg-gradient-to-br from-indigo-900 to-purple-900 py-12 px-4 sm:px-6 lg:px-8`}>
-      <div className="max-w-md w-full space-y-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-8 animate-slide-up">
-        <div>
-          <h2 className="text-center text-3xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            Join the Movie Universe
+    <div
+      className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
+        darkMode ? 'bg-gray-900' : 'bg-gray-100'
+      }`}
+    >
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 animate-gradient-bg opacity-80"></div>
+      <div className="absolute inset-0 backdrop-blur-sm"></div>
+
+      <div className="relative max-w-md w-full space-y-8 bg-white/10 dark:bg-gray-800/20 backdrop-blur-lg rounded-2xl shadow-2xl p-8 sm:p-10 animate-slide-up z-10">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            Join CineFlix
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-300">
-            Sign up to explore movies, casts, and more!
+          <p className="mt-2 text-sm text-gray-300">
+            Sign up to dive into a world of movies and shows!
           </p>
         </div>
 
         {serverMessage && (
-          <div className={`text-center p-3 rounded-lg ${serverMessage.includes('success') ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+          <div
+            className={`text-center p-4 rounded-lg animate-fade-in ${
+              serverMessage.includes('success')
+                ? 'bg-green-500/20 text-green-300'
+                : 'bg-red-500/20 text-red-300'
+            }`}
+          >
             {serverMessage}
           </div>
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-200">
                 Email
               </label>
               <input
@@ -104,15 +122,23 @@ const SignUp = ({ darkMode = true }) => {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-600'} bg-gray-800/50 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+                className={`mt-1 block w-full px-4 py-3 border ${
+                  errors.email ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/30 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400`}
                 placeholder="you@example.com"
+                aria-invalid={errors.email ? 'true' : 'false'}
+                aria-describedby={errors.email ? 'email-error' : undefined}
               />
-              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+              {errors.email && (
+                <p id="email-error" className="mt-1 text-xs text-red-400 animate-fade-in">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-200">
                 Username
               </label>
               <input
@@ -121,15 +147,23 @@ const SignUp = ({ darkMode = true }) => {
                 type="text"
                 value={formData.username}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${errors.username ? 'border-red-500' : 'border-gray-600'} bg-gray-800/50 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+                className={`mt-1 block w-full px-4 py-3 border ${
+                  errors.username ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/30 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400`}
                 placeholder="moviebuff123"
+                aria-invalid={errors.username ? 'true' : 'false'}
+                aria-describedby={errors.username ? 'username-error' : undefined}
               />
-              {errors.username && <p className="mt-1 text-xs text-red-500">{errors.username}</p>}
+              {errors.username && (
+                <p id="username-error" className="mt-1 text-xs text-red-400 animate-fade-in">
+                  {errors.username}
+                </p>
+              )}
             </div>
 
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-200">
                 Name
               </label>
               <input
@@ -138,44 +172,84 @@ const SignUp = ({ darkMode = true }) => {
                 type="text"
                 value={formData.name}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-600'} bg-gray-800/50 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+                className={`mt-1 block w-full px-4 py-3 border ${
+                  errors.name ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/30 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400`}
                 placeholder="John Doe"
+                aria-invalid={errors.name ? 'true' : 'false'}
+                aria-describedby={errors.name ? 'name-error' : undefined}
               />
-              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+              {errors.name && (
+                <p id="name-error" className="mt-1 text-xs text-red-400 animate-fade-in">
+                  {errors.name}
+                </p>
+              )}
             </div>
 
             {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+            <div className="relative">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-200">
                 Password
               </label>
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={formData.password}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${errors.password ? 'border-red-500' : 'border-gray-600'} bg-gray-800/50 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+                className={`mt-1 block w-full px-4 py-3 border ${
+                  errors.password ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/30 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400 pr-10`}
                 placeholder="••••••••"
+                aria-invalid={errors.password ? 'true' : 'false'}
+                aria-describedby={errors.password ? 'password-error' : undefined}
               />
-              {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-10 text-gray-400 hover:text-gray-200 focus:outline-none"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+              {errors.password && (
+                <p id="password-error" className="mt-1 text-xs text-red-400 animate-fade-in">
+                  {errors.password}
+                </p>
+              )}
             </div>
 
             {/* Confirm Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300">
+            <div className="relative">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-200">
                 Confirm Password
               </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'}
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-600'} bg-gray-800/50 text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300`}
+                className={`mt-1 block w-full px-4 py-3 border ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-600'
+                } bg-gray-800/30 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400 pr-10`}
                 placeholder="••••••••"
+                aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+                aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
               />
-              {errors.confirmPassword && <p className="mt-1 text-xs text-red-500">{errors.confirmPassword}</p>}
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                className="absolute right-3 top-10 text-gray-400 hover:text-gray-200 focus:outline-none"
+                aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+              {errors.confirmPassword && (
+                <p id="confirmPassword-error" className="mt-1 text-xs text-red-400 animate-fade-in">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
           </div>
 
@@ -183,23 +257,25 @@ const SignUp = ({ darkMode = true }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 ${
+                loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
+              }`}
             >
               {loading ? (
-                <svg className="animate-spin h-5 w-5 mr-3 text-white" viewBox="0 0 24 24">
+                <svg className="animate-spin h-6 w-6 mr-3 text-white" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                 </svg>
               ) : (
-                'Sign Up'
+                'Create Account'
               )}
             </button>
           </div>
         </form>
 
-        <p className="mt-2 text-center text-sm text-gray-400">
+        <p className="mt-4 text-center text-sm text-gray-300">
           Already have an account?{' '}
-          <a href="/login" className="font-medium text-blue-400 hover:text-blue-300">
+          <a href="/login" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
             Log in
           </a>
         </p>
@@ -213,6 +289,22 @@ const SignUp = ({ darkMode = true }) => {
           }
           .animate-slide-up {
             animation: slide-up 0.8s ease-out;
+          }
+          @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+          }
+          @keyframes gradient-bg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient-bg {
+            background-size: 200% 200%;
+            animation: gradient-bg 15s ease infinite;
           }
         `}
       </style>

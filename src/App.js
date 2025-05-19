@@ -16,7 +16,8 @@ const App = () => {
       <BrowserRouter>
         <Nav setDarkMode={setDarkMode} darkMode={darkMode} />
         <Routes>
-          <Route path="/" element={<Home darkMode={darkMode} />} />
+          {/* <Route path="/" element={<Home darkMode={darkMode} />} /> */}
+          <Route path="/" element={<SignUp darkMode={darkMode} />} />
           <Route path="/movieDetails/:id" element={<MovieDetails darkMode={darkMode} />} />
           <Route path="/cast/:id" element={<Cast darkMode={darkMode} />} />
           <Route path="/signup" element={<SignUp darkMode={darkMode} />} />
