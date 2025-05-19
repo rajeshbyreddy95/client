@@ -48,7 +48,7 @@ const Login = ({ darkMode }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        'https://cineflixserver-nine.vercel.app/api/auth/signup',
+        'https://cineflixserver-nine.vercel.app/api/auth/login',
         {
           email: formData.email,
           password: formData.password,
