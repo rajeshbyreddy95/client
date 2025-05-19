@@ -9,6 +9,7 @@ import SignUp from './screens/SignUp';
 import GenreMovies from './screens/GenreMovies';
 import Profile from './screens/Profile';
 import Login from './screens/Login';
+import Fav from './screens/Fav';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/cast/:id" element={<Cast darkMode={darkMode} />} />
           <Route path="/signup" element={<SignUp darkMode={darkMode} />} />
           <Route path="/login" element={<Login darkMode={darkMode} />} />
+          <Route path="/my-list" element={<Fav darkMode={darkMode} />} />
           <Route path="/genre/:genreId" element={<GenreMovies darkMode={darkMode} />} />
         </Routes>
       </BrowserRouter>
