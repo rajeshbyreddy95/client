@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { User, Heart, Trash2, Loader2 } from 'lucide-react';
+import { User, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Profile = ({ darkMode }) => {
   const [user, setUser] = useState(null);
-  const [favourites, setFavourites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -28,8 +27,6 @@ const Profile = ({ darkMode }) => {
           }
         );
         setUser(userResponse.data);
-
-        
       } catch (err) {
         console.error('Profile fetch error:', {
           message: err.message,
@@ -50,23 +47,6 @@ const Profile = ({ darkMode }) => {
 
     fetchUserData();
   }, [navigate]);
-
-//   const handleRemoveFavourite = async (id) => {
-//     const token = localStorage.getItem('token');
-//     try {
-//       await axios.delete(
-//         `https://cineflixserver-nine.vercel.app/api/favourites/${id}`,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-//       setFavourites(favourites.filter((fav) => fav.id !== id));
-//       setError('');
-//     } catch (err) {
-//       console.error('Remove favourite error:', err.response?.data);
-//       setError('Failed to remove favourite.');
-//     }
-//   };
 
   if (loading) {
     return (
@@ -101,7 +81,7 @@ const Profile = ({ darkMode }) => {
           <div
             className={`p-6 rounded-xl shadow-lg ${
               darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-            } mb-8 transform transition-all duration-500 hover:shadow-2xl`}
+            } transform transition-all duration-500 hover:shadow-2xl`}
           >
             <div className="flex items-center space-x-4">
               <div
@@ -132,8 +112,6 @@ const Profile = ({ darkMode }) => {
             </button>
           </div>
         )}
-
-        
       </div>
     </div>
   );
