@@ -49,7 +49,7 @@ const SignUp = ({ darkMode = true }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        'https://movierecomendation-gilt.vercel.app/api/auth/signup',
+        'https://movierecomendation-gilt.vercel.app/api/signup',
         formData,
         {
           headers: {
