@@ -47,6 +47,8 @@ const SignUp = ({ darkMode = true }) => {
     if (!validateForm()) return;
 
     setLoading(true);
+    console.log(formData);
+    
     try {
       const response = await axios.post(
         'https://movierecomendation-gilt.vercel.app/api/auth/signup',
