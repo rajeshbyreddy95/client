@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sun, Moon, Menu, X, ChevronDown } from 'lucide-react';
+import { Sun, Moon, Menu, X, ChevronDown, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Nav = ({ darkMode, setDarkMode }) => {
@@ -7,10 +7,17 @@ const Nav = ({ darkMode, setDarkMode }) => {
   const [genresOpen, setGenresOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Placeholder: Check if user is logged in (replace with your auth logic)
+  const isLoggedIn = !!localStorage.getItem('token'); // Example: Check for token
+
   const toggleDark = () => setDarkMode(!darkMode);
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleGenres = () => setGenresOpen(!genresOpen);
-  
+
+  const handleProfileClick = () => {
+    navigate(isLoggedIn ? '/profile' : '/login');
+  };
+
   const genreMap = {
     28: 'Action',
     12: 'Adventure',
@@ -35,8 +42,8 @@ const Nav = ({ darkMode, setDarkMode }) => {
 
   const handleGenreClick = (genreId) => {
     navigate(`/genre/${genreId}`);
-    setGenresOpen(false); // Close dropdown on selection
-    setMenuOpen(false); // Close mobile menu on selection
+    setGenresOpen(false);
+    setMenuOpen(false);
   };
 
   return (
@@ -62,7 +69,7 @@ const Nav = ({ darkMode, setDarkMode }) => {
           </button>
         </div>
 
-        {/* Center + Right: Links, Search, and Dark Mode */}
+        {/* Center + Right: Links, Search, and Icons */}
         <div
           className={`w-full lg:flex lg:items-center lg:w-auto ${
             menuOpen ? 'block' : 'hidden'
@@ -141,8 +148,24 @@ const Nav = ({ darkMode, setDarkMode }) => {
             />
           </div>
 
-          {/* Right: Dark Mode Toggle */}
-          <div className="mt-4 lg:mt-0 lg:ml-6">
+          {/* Right: Profile and Dark Mode */}
+          <div className="mt-4 lg:mt-0 lg:ml-6 flex items-center gap-2">
+            {/* Profile Icon */}
+            <button
+              onClick={handleProfileClick}
+              className={`p-2 rounded-full ${
+                darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-200 hover:bg-gray-300'
+              } transition-colors`}
+              title={isLoggedIn ? 'Go to Profile' : 'Log In'}
+              aria-label={isLoggedIn ? 'Go to Profile' : 'Log In'}
+            >
+              <User
+                size={24}
+                className={darkMode ? 'text-gray-300' : 'text-gray-700'}
+              />
+            </button>
+
+            {/* Dark Mode Toggle */}
             <button
               onClick={toggleDark}
               className={`p-2 rounded-full ${
