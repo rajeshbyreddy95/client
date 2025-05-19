@@ -29,14 +29,7 @@ const Profile = ({ darkMode }) => {
         );
         setUser(userResponse.data);
 
-        // Fetch favourites
-        // const favouritesResponse = await axios.get(
-        //   'https://cineflixserver-nine.vercel.app/api/favourites',
-        //   {
-        //     headers: { Authorization: `Bearer ${token}` },
-        //   }
-        // );
-        // setFavourites(favouritesResponse.data);
+        
       } catch (err) {
         console.error('Profile fetch error:', {
           message: err.message,
@@ -140,63 +133,7 @@ const Profile = ({ darkMode }) => {
           </div>
         )}
 
-        {/* Favourites Section */}
-        <h2
-          className={`text-2xl font-bold mb-6 ${
-            darkMode ? 'text-white' : 'text-gray-900'
-          }`}
-        >
-          My Favourites
-        </h2>
-        {favourites.length === 0 ? (
-          <p
-            className={`text-center ${
-              darkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}
-          >
-            No favourites added yet.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {favourites.map((fav) => (
-              <div
-                key={fav.id}
-                className={`p-4 rounded-lg shadow-md ${
-                  darkMode ? 'bg-gray-800' : 'bg-white'
-                } relative group hover:shadow-lg transition-all duration-300`}
-              >
-                <img
-                  src={fav.poster || 'https://via.placeholder.com/150'}
-                  alt={fav.title}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
-                <h3
-                  className={`text-lg font-semibold ${
-                    darkMode ? 'text-white' : 'text-gray-900'
-                  }`}
-                >
-                  {fav.title}
-                </h3>
-                <button
-                  onClick={() => handleRemoveFavourite(fav.id)}
-                  className={`absolute top-2 right-2 p-2 rounded-full ${
-                    darkMode
-                      ? 'bg-gray-700 hover:bg-red-600'
-                      : 'bg-gray-200 hover:bg-red-500'
-                  } text-white opacity-0 group-hover:opacity-100 transition-opacity`}
-                  title="Remove from Favourites"
-                >
-                  <Trash2 size={20} />
-                </button>
-                <Heart
-                  size={20}
-                  className="text-red-600 mt-2"
-                  fill="currentColor"
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        
       </div>
     </div>
   );
