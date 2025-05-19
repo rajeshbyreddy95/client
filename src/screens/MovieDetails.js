@@ -52,40 +52,38 @@ const MovieDetails = ({ darkMode }) => {
     setComment('');
     setCommentError('');
   };
+const handleAddToFavourites = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    setToast({
+      message: 'Please log in to add to favourites',
+      type: 'error',
+      visible: true,
+    });
+    setTimeout(() => navigate('/login'), 2000);
+    return;
+  }
 
-  const handleAddToFavourites = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setToast({
-        message: 'Please log in to add to favourites',
-        type: 'error',
-        visible: true,
-      });
-      setTimeout(() => navigate('/login'), 2000);
-      return;
-    }
-
-    try {
-      await axios.post(
-        'https://cineflixserver-nine.vercel.app/api/favourites',
-        { movieId: id },
-        { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
-      );
-      setToast({
-        message: 'Movie added to favourites!',
-        type: 'success',
-        visible: true,
-      });
-    } catch (error) {
-      console.error('Add favourite error:', error.response?.data);
-      setToast({
-        message: error.response?.data?.message || 'Failed to add to favourites',
-        type: 'error',
-        visible: true,
-      });
-    }
-  };
-
+  try {
+    await axios.post(
+      'https://cineflixserver-nine.vercel.app/api/favourites',
+      { movieId: id },
+      { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } }
+    );
+    setToast({
+      message: 'Movie added to favourites!',
+      type: 'success',
+      visible: true,
+    });
+  } catch (error) {
+    console.error('Add favourite error:', error.response?.data);
+    setToast({
+      message: error.response?.data?.message || 'Failed to add to favourites',
+      type: 'error',
+      visible: true,
+    });
+  }
+};
   // Auto-hide toast after 3 seconds
   useEffect(() => {
     if (toast.visible) {
