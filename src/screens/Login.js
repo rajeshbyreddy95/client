@@ -48,7 +48,7 @@ const Login = ({ darkMode }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        'https://movierecomendation-gilt.vercel.app/api/auth/login',
+        'https://cineflixserver-nine.vercel.app/api/auth/signup',
         {
           email: formData.email,
           password: formData.password,
